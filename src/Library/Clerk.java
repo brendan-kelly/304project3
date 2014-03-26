@@ -8,7 +8,7 @@ import Library.Main;
 
 public class Clerk {
 
-
+	//So we can use the connectoin "con" to access the SQL database
 	Main m = new Main();
 	Connection con = m.getConnection();
 
