@@ -591,7 +591,7 @@ public class branch implements ActionListener
 	  
 	try
 	{
-	  ps = con.prepareStatement("DELETE FROM book WHERE book_no = ?");
+	  ps = con.prepareStatement("DELETE FROM book WHERE book_callNumber = ?");
 	
 	  System.out.print("\nBook Call Number: ");
 	  callNumber = Integer.parseInt(in.readLine());
@@ -631,7 +631,7 @@ public class branch implements ActionListener
     /*
      * display information about books
      */ 
-    /*private void showBbook()
+    private void showBook()
     {
     	String		callNumber;
     	String		isbn;
@@ -673,34 +673,23 @@ public class branch implements ActionListener
 	
 		      // simplified output formatting; truncation may occur
 	
-		      bid = rs.getString("branch_id");
-		      System.out.printf("%-10.10s", bid);
+		      callNumber = rs.getString("book_callNumber");
+		      System.out.printf("%-10.10s", callNumber);
 	
-		      bname = rs.getString("branch_name");
-		      System.out.printf("%-20.20s", bname);
+		      isbn = rs.getString("book_isbn");
+		      System.out.printf("%-20.20s", isbn);
 	
-		      baddr = rs.getString("branch_addr");
-		      if (rs.wasNull())
-		      {
-		    	  System.out.printf("%-20.20s", " ");
-	              }
-		      else
-		      {
-		    	  System.out.printf("%-20.20s", baddr);
-		      }
+		      title = rs.getString("book_title");
+		      System.out.printf("%-20.20s", title);
 	
-		      bcity = rs.getString("branch_city");
-		      System.out.printf("%-15.15s", bcity);
+		      mainAuthor = rs.getString("book_mainAuthor");
+		      System.out.printf("%-15.15s", mainAuthor);
 	
-		      bphone = rs.getString("branch_phone");
-		      if (rs.wasNull())
-		      {
-		    	  System.out.printf("%-15.15s\n", " ");
-	              }
-		      else
-		      {
-		    	  System.out.printf("%-15.15s\n", bphone);
-		      }      
+		      publisher = rs.getString("book_publisher");
+		      System.out.printf("%-15.15s", publisher);   
+		      
+		      year = rs.getString("book_year");
+		      System.out.printf("%-15.15s", year);   
 		  }
 	 
 		  // close the statement; 
@@ -711,7 +700,7 @@ public class branch implements ActionListener
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		}	
-    }*/
+    }
 
     public static void main(String args[])
     {
