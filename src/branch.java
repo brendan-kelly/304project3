@@ -426,80 +426,6 @@ public class branch implements ActionListener
 	}	
     }
     
-    
-    /*
-     * insert Book information
-     * Book(callNumber, isbn, title, mainAuthor, publisher, year )
-     * 
-     */
-    
-    private void insertBook()
-    {
-	int                callNumber;
-	int				   isbn;
-	String             title;
-	String             mainAuthor;
-	String			   publisher;
-	int				   year;
-	PreparedStatement  ps;
-	  
-	try
-	{
-	  ps = con.prepareStatement("INSERT INTO branch VALUES (?,?,?,?,?)");
-	
-	  System.out.print("\nBook Call Number: ");
-	  callNumber = Integer.parseInt(in.readLine());
-	  ps.setInt(1, callNumber);
-	  
-	  System.out.print("\nBook ISBN: ");
-	  isbn = Integer.parseInt(in.readLine());
-	  ps.setInt(2, isbn);
-
-	  System.out.print("\nBook Title: ");
-	  title = in.readLine();
-	  ps.setString(3, title);
-	  
-	  System.out.print("\nBook Author: ");
-	  mainAuthor = in.readLine();
-	  ps.setString(4, mainAuthor);
-	  
-	  System.out.print("\nPublisher: ");
-	  publisher = in.readLine();
-	  ps.setString(5, publisher);
-
-	  System.out.print("\nYear: ");
-	  year = Integer.parseInt(in.readLine());
-	  ps.setInt(6, year);
-	  
-
-	  ps.executeUpdate();
-
-	  // commit work 
-	  con.commit();
-
-	  ps.close();
-	}
-	catch (IOException e)
-	{
-	    System.out.println("IOException!");
-	}
-	catch (SQLException ex)
-	{
-	    System.out.println("Message: " + ex.getMessage());
-	    try 
-	    {
-		// undo the insert
-		con.rollback();	
-	    }
-	    catch (SQLException ex2)
-	    {
-		System.out.println("Message: " + ex2.getMessage());
-		System.exit(-1);
-	    }
-	}
-    }
-
-    
     /*
      * display information about branches
      */ 
@@ -584,7 +510,209 @@ public class branch implements ActionListener
 	}	
     }
     
- 
+    /*
+     * insert Book information
+     * Book(callNumber, isbn, title, mainAuthor, publisher, year )
+     * 
+     */
+    
+    private void insertBook()
+    {
+	int                callNumber;
+	int				   isbn;
+	String             title;
+	String             mainAuthor;
+	String			   publisher;
+	int				   year;
+	PreparedStatement  ps;
+	  
+	try
+	{
+	  ps = con.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?)");
+	
+	  System.out.print("\nBook Call Number: ");
+	  callNumber = Integer.parseInt(in.readLine());
+	  ps.setInt(1, callNumber);
+	  
+	  System.out.print("\nBook ISBN: ");
+	  isbn = Integer.parseInt(in.readLine());
+	  ps.setInt(2, isbn);
+
+	  System.out.print("\nBook Title: ");
+	  title = in.readLine();
+	  ps.setString(3, title);
+	  
+	  System.out.print("\nBook Author: ");
+	  mainAuthor = in.readLine();
+	  ps.setString(4, mainAuthor);
+	  
+	  System.out.print("\nPublisher: ");
+	  publisher = in.readLine();
+	  ps.setString(5, publisher);
+
+	  System.out.print("\nYear: ");
+	  year = Integer.parseInt(in.readLine());
+	  ps.setInt(6, year);
+	  
+	  ps.executeUpdate();
+
+	  // commit work 
+	  con.commit();
+
+	  ps.close();
+	}
+	catch (IOException e)
+	{
+	    System.out.println("IOException!");
+	}
+	catch (SQLException ex)
+	{
+	    System.out.println("Message: " + ex.getMessage());
+	    try 
+	    {
+		// undo the insert
+		con.rollback();	
+	    }
+	    catch (SQLException ex2)
+	    {
+		System.out.println("Message: " + ex2.getMessage());
+		System.exit(-1);
+	    }
+	}
+    }
+    
+    /*
+     * deletes a book
+     */ 
+    private void deleteBook()
+    {
+	int                callNumber;
+	PreparedStatement  ps;
+	  
+	try
+	{
+	  ps = con.prepareStatement("DELETE FROM book WHERE book_no = ?");
+	
+	  System.out.print("\nBook Call Number: ");
+	  callNumber = Integer.parseInt(in.readLine());
+	  ps.setInt(1, callNumber);
+
+	  int rowCount = ps.executeUpdate();
+
+	  if (rowCount == 0)
+	  {
+	      System.out.println("\nBook " + callNumber + " does not exist!");
+	  }
+
+	  con.commit();
+
+	  ps.close();
+	}
+	catch (IOException e)
+	{
+	    System.out.println("IOException!");
+	}
+	catch (SQLException ex)
+	{
+	    System.out.println("Message: " + ex.getMessage());
+
+            try 
+	    {
+		con.rollback();	
+	    }
+	    catch (SQLException ex2)
+	    {
+		System.out.println("Message: " + ex2.getMessage());
+		System.exit(-1);
+	    }
+	}
+    }
+    
+    /*
+     * display information about books
+     */ 
+    /*private void showBbook()
+    {
+    	String		callNumber;
+    	String		isbn;
+    	String		title;
+    	String		mainAuthor;
+    	String		publisher;
+    	String		year;
+    	Statement	stmt;
+    	ResultSet	rs;
+	   
+		try
+		{
+		  stmt = con.createStatement();
+	
+		  rs = stmt.executeQuery("SELECT * FROM book");
+	
+		  // get info on ResultSet
+		  ResultSetMetaData rsmd = rs.getMetaData();
+	
+		  // get number of columns
+		  int numCols = rsmd.getColumnCount();
+	
+		  System.out.println(" ");
+		  
+		  // display column names;
+		  for (int i = 0; i < numCols; i++)
+		  {
+		      // get column name and print it
+	
+		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+		  }
+	
+		  System.out.println(" ");
+	
+		  while(rs.next())
+		  {
+		      // for display purposes get everything from Oracle 
+		      // as a string
+	
+		      // simplified output formatting; truncation may occur
+	
+		      bid = rs.getString("branch_id");
+		      System.out.printf("%-10.10s", bid);
+	
+		      bname = rs.getString("branch_name");
+		      System.out.printf("%-20.20s", bname);
+	
+		      baddr = rs.getString("branch_addr");
+		      if (rs.wasNull())
+		      {
+		    	  System.out.printf("%-20.20s", " ");
+	              }
+		      else
+		      {
+		    	  System.out.printf("%-20.20s", baddr);
+		      }
+	
+		      bcity = rs.getString("branch_city");
+		      System.out.printf("%-15.15s", bcity);
+	
+		      bphone = rs.getString("branch_phone");
+		      if (rs.wasNull())
+		      {
+		    	  System.out.printf("%-15.15s\n", " ");
+	              }
+		      else
+		      {
+		    	  System.out.printf("%-15.15s\n", bphone);
+		      }      
+		  }
+	 
+		  // close the statement; 
+		  // the ResultSet will also be closed
+		  stmt.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}	
+    }*/
+
     public static void main(String args[])
     {
       branch b = new branch();
