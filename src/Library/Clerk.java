@@ -8,12 +8,17 @@ import Library.Main;
 
 public class Clerk {
 
+
+	Main m = new Main();
+	Connection con = m.getConnection();
+
+
 	// Creates a borrower with the given input
 	public void insertBorrower(int id, String name, String password, String address, int phone, String email, int sinOrStNo, int expiryDate, String type){
 
-		Main m = new Main();
+
 		PreparedStatement  ps;
-		Connection con = m.getConnection();
+
 
 		try
 		{
@@ -85,16 +90,16 @@ public class Clerk {
 	public void processReturn(int copyNo){
 		//stub
 	}
-	
-//	Checks overdue items. The system displays a list of the items that are overdue and the
-//	borrowers who have checked them out.
-//	The clerk may decide to se
-//	nd an email messages
-//	to any
-//	of
-//	them (or to all of them)
+
+	//	Checks overdue items. The system displays a list of the items that are overdue and the
+	//	borrowers who have checked them out.
+	//	The clerk may decide to se
+	//	nd an email messages
+	//	to any
+	//	of
+	//	them (or to all of them)
 	public void checkOverdueItems(){
 		//stub
 	}
-	
+
 }
