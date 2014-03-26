@@ -591,7 +591,7 @@ public class branch implements ActionListener
 	  
 	try
 	{
-	  ps = con.prepareStatement("DELETE FROM book WHERE book_no = ?");
+	  ps = con.prepareStatement("DELETE FROM book WHERE book_callNumber = ?");
 	
 	  System.out.print("\nBook Call Number: ");
 	  callNumber = Integer.parseInt(in.readLine());
@@ -631,7 +631,7 @@ public class branch implements ActionListener
     /*
      * display information about books
      */ 
-    /*private void showBbook()
+    private void showBook()
     {
     	String		callNumber;
     	String		isbn;
@@ -673,34 +673,23 @@ public class branch implements ActionListener
 	
 		      // simplified output formatting; truncation may occur
 	
-		      bid = rs.getString("branch_id");
-		      System.out.printf("%-10.10s", bid);
+		      callNumber = rs.getString("book_callNumber");
+		      System.out.printf("%-20.20s", callNumber);
 	
-		      bname = rs.getString("branch_name");
-		      System.out.printf("%-20.20s", bname);
+		      isbn = rs.getString("book_isbn");
+		      System.out.printf("%-20.20s", isbn);
 	
-		      baddr = rs.getString("branch_addr");
-		      if (rs.wasNull())
-		      {
-		    	  System.out.printf("%-20.20s", " ");
-	              }
-		      else
-		      {
-		    	  System.out.printf("%-20.20s", baddr);
-		      }
+		      title = rs.getString("book_title");
+		      System.out.printf("%-50.50s", title);
 	
-		      bcity = rs.getString("branch_city");
-		      System.out.printf("%-15.15s", bcity);
+		      mainAuthor = rs.getString("book_mainAuthor");
+		      System.out.printf("%-50.50s", mainAuthor);
 	
-		      bphone = rs.getString("branch_phone");
-		      if (rs.wasNull())
-		      {
-		    	  System.out.printf("%-15.15s\n", " ");
-	              }
-		      else
-		      {
-		    	  System.out.printf("%-15.15s\n", bphone);
-		      }      
+		      publisher = rs.getString("book_publisher");
+		      System.out.printf("%-50.50s", publisher);   
+		      
+		      year = rs.getString("book_year");
+		      System.out.printf("%-10.10s", year);   
 		  }
 	 
 		  // close the statement; 
@@ -711,8 +700,164 @@ public class branch implements ActionListener
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		}	
-    }*/
+    }
+    
+	/*
+	 * insert BorrowerType information
+	 * BorrowerType(type,bookTimeLimit
+	 * 
+	 */
+	
+    private void insertBorrowerType()
+    {
+    	String type;
+    	int bookTimeLimit;
+    	PreparedStatement ps;
+    	
+    	try
+    	{
+    	  ps = con.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?)");
+    	
+    	  System.out.print("\nBorrower Type: ");
+    	  type = in.readLine();
+    	  ps.setString(1, type);
+    	  
+    	  System.out.print("\nBorrower Book Time Limit: ");
+    	  bookTimeLimit = Integer.parseInt(in.readLine());
+    	  ps.setInt(2, bookTimeLimit);
+    	  
+    	  ps.executeUpdate();
 
+    	  // commit work 
+    	  con.commit();
+
+    	  ps.close();
+    	}
+    	catch (IOException e)
+    	{
+    	    System.out.println("IOException!");
+    	}
+    	catch (SQLException ex)
+    	{
+    	    System.out.println("Message: " + ex.getMessage());
+    	    try 
+    	    {
+    		// undo the insert
+    		con.rollback();	
+    	    }
+    	    catch (SQLException ex2)
+    	    {
+    		System.out.println("Message: " + ex2.getMessage());
+    		System.exit(-1);
+    	    }
+    	}
+    }
+    
+    /*
+     * deletes a book
+     */ 
+    private void deleteBorrowerType()
+    {
+	String             type;
+	PreparedStatement  ps;
+	  
+	try
+	{
+	  ps = con.prepareStatement("DELETE FROM borrowertype WHERE book_type = ?");
+	
+	  System.out.print("\nBorrower Type: ");
+	  type = in.readLine();
+	  ps.setString(1, type);
+
+	  int rowCount = ps.executeUpdate();
+
+	  if (rowCount == 0)
+	  {
+	      System.out.println("\nBorrower Type: " + type + " does not exist!");
+	  }
+
+	  con.commit();
+
+	  ps.close();
+	}
+	catch (IOException e)
+	{
+	    System.out.println("IOException!");
+	}
+	catch (SQLException ex)
+	{
+	    System.out.println("Message: " + ex.getMessage());
+
+            try 
+	    {
+		con.rollback();	
+	    }
+	    catch (SQLException ex2)
+	    {
+		System.out.println("Message: " + ex2.getMessage());
+		System.exit(-1);
+	    }
+	}
+    }
+    
+    /*
+     * display information about books
+     */ 
+    private void showBorrowerType()
+    {
+    	String      type;
+    	String      bookTimeLimit;
+    	Statement	stmt;
+    	ResultSet	rs;
+	   
+		try
+		{
+		  stmt = con.createStatement();
+	
+		  rs = stmt.executeQuery("SELECT * FROM borrowertype");
+	
+		  // get info on ResultSet
+		  ResultSetMetaData rsmd = rs.getMetaData();
+	
+		  // get number of columns
+		  int numCols = rsmd.getColumnCount();
+	
+		  System.out.println(" ");
+		  
+		  // display column names;
+		  for (int i = 0; i < numCols; i++)
+		  {
+		      // get column name and print it
+	
+		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+		  }
+	
+		  System.out.println(" ");
+	
+		  while(rs.next())
+		  {
+		      // for display purposes get everything from Oracle 
+		      // as a string
+	
+		      // simplified output formatting; truncation may occur
+	
+			  type = rs.getString("borrwertype_type");
+		      System.out.printf("%-20.20s", type);
+	
+		      bookTimeLimit = rs.getString("borrwertype_bookTimeLimit");
+		      System.out.printf("%-20.20s", bookTimeLimit);
+		  }
+	 
+		  // close the statement; 
+		  // the ResultSet will also be closed
+		  stmt.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}	
+    }
+    
     public static void main(String args[])
     {
       branch b = new branch();
