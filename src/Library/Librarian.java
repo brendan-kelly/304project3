@@ -27,17 +27,32 @@ public class Librarian {
 	//		NOTE: potentailly we will do all the UI stuff with one class, in which case we would 
 	//		 change the return type of this method from void to some sort of ArrayList<> - and then return that
 	//		 so our UI function can call/print it
-	public void generateBookReport(){
+	public void generateBookReport(String subject){
 		//stub
+		
+		// return-ish~~~ outDate, (borrowertype.borrowertype_bookTimeLimit + borrowing.borrowing_OutDate), 
+		
+		
+		//	If subject != null {
+		// SELECT bookcopy FROM borrowing WHERE InDate IS NULL AND (borrowertype.borrowertype_bookTimeLimit + borrowing.borrowing_OutDate) < CurrentDate
+		//										ORDER BY hassubject.hassubject_subject desc }
+		
+		// Otherwise: SELECT bookcopy FROM borrowing WHERE InDate IS NULL AND (borrowertype.borrowertype_bookTimeLimit + borrowing.borrowing_OutDate) < CurrentDate										
 	}
+
 //	Generate a report with the most popular items in a given year.
 //	The librarian provides a
 //	year and a number n. The system lists out the top n books that where borrowed the most
 //	times during that year. The books are ordered by the number of times they were
 //	borrowed.
 	
-	public void generateYearlyReport(){
+	public generateYearlyReport(Date year, Int n){
 		//stub
+		
+		// borrowing
+		// ORDER BY COUNT(...)
+		
+		// SELECT bookcopy FROM borrowing WHERE 
 	}
 
 }

@@ -68,12 +68,19 @@ public class Clerk {
 
 	//	Check-out items borrowed by a borrower. To borrow items, borrowers provide their card
 	//	number and a list with the call numbers of the items they want to check out. The system
-	//	determines if the borrower's account is valid and if the library items are availab
-	//	le for
+	//	determines if the borrower's account is valid and if the library items are available for
 	//	borrowing. Then it creates one or more borrowing records and prints a note with the
 	//	items and their due day (which is giver to the borrower)
+	
 	public void checkOutItems(int id, ArrayList<Integer> callNumbers){
 		//stub
+		// If (
+		//SELECT COUNT (bookcopy) FROM bookcopy, book WHERE book.bookcopy_status = "in", book.book_callNumber = bookcopy.book_callNumber 
+		// != 0, &&
+		// if ((SELECT borrower.borrower_expiryDate FROM borrower WHERE borrower.borrower_bid = id) > Current Date) {
+		// INSERT INTO borrowing VALUES (?, id, i, copyNo, currentDate, null)
+		// Print same values inserted
+		// if (borrower.borrower_type = ___) returnDate = 
 	}
 
 	//	Processes a return. When
@@ -89,6 +96,15 @@ public class Clerk {
 
 	public void processReturn(int copyNo){
 		//stub
+		// Find user that borrowed:
+		// SELECT borrowing FROM  borrowing WHERE borrowing.book_copyNo = copyNo AS Temp
+		// This changes it to in: 
+		// UPDATE bookcopy SET bookcopy.bookcopy_status = "in" WHERE bookcopy.bookcopy_copyNo = copyNo
+		// if (borrowing.borrowing_outDate > borrowing.borrowing_inDate + userTypeTime) then
+		// INSERT INTO fine VALUES (generated, amount??, currentDate, null, id)
+		// Send "messages" to all the following users: 
+		// SELECT holdrequest.borrowing_bid FROM holdrequest, Temp WHERE Temp.book_callNumber = holdrequest.book_callNumber
+		
 	}
 
 	//	Checks overdue items. The system displays a list of the items that are overdue and the
@@ -100,6 +116,9 @@ public class Clerk {
 	//	them (or to all of them)
 	public void checkOverdueItems(){
 		//stub
+		//																									borrower.borrowertype_type = borrowertype.borrowertype_type
+		// SELECT bookcopy, borrower FROM borrowing, borrowertype WHERE borrowing.borrowing_inDate IS NULL, ((int [borrowertype.borrowertype_bookTimeLimit) + 
+		//												  borrowing.borrowing_outDate) < CurrentDate 
 	}
 
 }
