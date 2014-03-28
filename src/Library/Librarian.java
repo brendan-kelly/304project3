@@ -2,13 +2,13 @@ package Library;
 
 import java.sql.*;
 import java.util.ArrayList;
-
-import Library.Main;
+import main.Book;
+import main.branch;
 
 public class Librarian {
 	//So we can use the connectoin "con" to access the SQL database
-	Main m = new Main();
-	Connection con = m.getConnection();
+	branch b = new branch();
+	Connection con = b.getConnection();
 
 	//		Adds a new book or new copy of an existing book to the library. The librarian provides
 	//		the information for the new book, and the system adds it to the library
@@ -46,7 +46,7 @@ public class Librarian {
 //	times during that year. The books are ordered by the number of times they were
 //	borrowed.
 	
-	public generateYearlyReport(Date year, Int n){
+	public void generateYearlyReport(Date year, Integer n){
 		//stub
 		
 		// borrowing

@@ -3,14 +3,15 @@ package Library;
 import java.sql.*;
 import java.util.ArrayList;
 
-import Library.Main;
+import main.Book;
+import main.branch;
 
 
 public class Clerk {
 
 	//So we can use the connectoin "con" to access the SQL database
-	Main m = new Main();
-	Connection con = m.getConnection();
+	branch b = new branch();
+	Connection con = b.getConnection();
 
 
 	// Creates a borrower with the given input
