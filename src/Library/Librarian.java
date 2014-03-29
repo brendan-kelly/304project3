@@ -2,6 +2,7 @@ package Library;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 import main.Book;
 import main.branch;
@@ -10,14 +11,15 @@ public class Librarian {
 	//So we can use the connectoin "con" to access the SQL database
 	branch b = new branch();
 	Connection con = b.getConnection();
+	java.util.Date date = new Date();
+	java.sql.Date currentdate = new java.sql.Date(date.getTime());
 
 	//		Adds a new book or new copy of an existing book to the library. The librarian provides
 	//		the information for the new book, and the system adds it to the library
-	public void addBook(int callNumber, int isbn, String title, String mainAuthor, String publisher, Date Year){
+	public void addBook(int callNumber, int isbn, String title, String mainAuthor, String publisher, java.sql.Date Year){
 		//stub, think Brendan already wrote this
 		
-		branch b = new branch();
-		Connection con = b.getConnection();
+		
 		PreparedStatement  ps;
 
 		try {

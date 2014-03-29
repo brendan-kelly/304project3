@@ -27,6 +27,7 @@ public class Borrower {
 	public void search(String keyword){
 		Statement  stmt;
 		ResultSet  rs;
+		
 
 		// SELECT * FROM book, hassubject WHERE book.book_title = keyword OR book.book_mainAuthor = keyword OR hassubject.hassubject_subject = keyword AND book.book_callNumber = hassubject.book_callNumber ORDER BY book.book_callNumber AS Temp
 		// SELECT COUNT (bookcopy) FROM bookcopy, Temp WHERE book.bookcopy_status = "in", Temp.book_callNumber = bookcopy.book_callNumber ORDER BY bookcopy.book_callNumber

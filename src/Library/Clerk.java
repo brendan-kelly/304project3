@@ -93,6 +93,7 @@ public class Clerk {
 		PreparedStatement ps4;
 
 		ResultSet rs1;
+		ResultSet bookCopy;
 		Date expiryDate = currentdate;
 
 		//Getting # of books that are in
@@ -120,7 +121,6 @@ public class Clerk {
 			else{
 				// Do this for every book in the list
 				for(int i = 0; i < callNumbers.size(); i++ ){
-					ResultSet bookCopy;
 					//get the number of books available
 					ps2 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo), bookcopy.bookcopy_copyNo FROM bookcopy WHERE bookcopy.bookcopy_status = 'In' AND bookcopy.book_callNumber = ? GROUP BY bookcopy.bookcopy_copyNo");
 					int callNumber = callNumbers.get(i);
