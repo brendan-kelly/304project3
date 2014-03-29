@@ -44,45 +44,142 @@ public class Borrower {
 
 	public void checkAccount(int id){
 		//stub
-		// works!! SELECT * FROM borrowing WHERE borrowing.borrowing_inDate IS NULL AND borrowing.borrowing_outDate IS NOT NULL AND borrowing.borrower_bid = id
+		// SELECT * FROM book
+		// works!! SELECT * FROM borrowing WHERE borrowing.borrowing_inDate IS NULL AND
+		// borrowing.borrowing_outDate IS NOT NULL AND borrowing.borrower_bid = id
 		// this should return the books they borrowed
-		// SELECT * FROM Fine, borrowing, Temp WHERE fine.fine_paidDate IS NULL AND borrowing.borrowing_borid = fine.borrowing_borid AND borrowing.borrower_bid = id
+		// SELECT * FROM Fine, borrowing WHERE fine.fine_paidDate IS NULL AND borrowing.borrowing_borid = fine.borrowing_borid
+		// AND borrowing.borrower_bid = id
 		// This shoudl return all the fines that have not been paid from the list of borrowed books?
 		// SELECT * FROM holdrequest WHERE holdrequest.borrower_bid = id
+		
+		String callNumber = "";
+		String isbn = "";
+		String title = "";
+		String mainAuthor = "";
+		String publisher = "";
+		String year = "";
+		
+		String fid = "";
+		String amount = "";
+		String fineIssuedDate = "";
+		String paidDate = "";
+		String borrowing = "";
+		
+		String hid = "";
+		String holdRequestCallNumber = "";
+		String holdRequestIssuedDate = "";
+		
+		branch b = new branch();
+		Connection con = b.getConnection();
+		
+		PreparedStatement ps;
+		PreparedStatement ps2;
+		PreparedStatement ps3;
+		ResultSet rs;
+		ResultSet rs2;
+		ResultSet rs3;
+		
+		try {
+			ps = con.prepareStatement("SELECT * FROM book WHERE EXISTS (SELECT * FROM borrowing WHERE " +
+					   "borrowing.borrowing_inDate IS NULL AND borrowing.borrower_bid = ? " +
+					   "AND borrowing.book_callNumber = book.book_callNumber)");
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+
+			while(rs.next()) {
+				callNumber = rs.getString("book_callNumber");
+				isbn = rs.getString("book_isbn");
+				title = rs.getString("book_title");
+				mainAuthor = rs.getString("book_mainAuthor");
+				publisher = rs.getString("book_publisher");
+				year = rs.getString("book_year");
+			}
+			
+			ps2 = con.prepareStatement("SELECT * FROM Fine, borrowing WHERE fine.fine_paidDate IS NULL " +
+									   "AND fine.borrowing_borid = borrowing.borrowing_borid ");
+			//ps2.setInt(1, id);
+			rs2 = ps2.executeQuery();
+			
+			while(rs2.next()) {
+				fid = rs2.getString("fine_fid");
+				amount = rs2.getString("fine_amount");
+				fineIssuedDate = rs2.getString("fine_issuedDate");
+				paidDate = rs2.getString("fine_paidDate");
+				borrowing = rs2.getString("borrowing_borid");
+			}
+			
+			ps3 = con.prepareStatement("SELECT * FROM holdrequest WHERE holdrequest.borrower_bid = ?");
+			ps3.setInt(1, id);
+			rs3 = ps3.executeQuery();
+			
+			while(rs3.next()) {
+				hid = rs3.getString("holdrequest_hid");
+				holdRequestCallNumber = rs3.getString("book_callNumber");
+				holdRequestIssuedDate = rs3.getString("holdrequest_issuedDate");
+			}
+			
+			ps.executeUpdate(); 
+			con.commit();
+			ps.close();
+			
+			System.out.println(callNumber);
+			System.out.println(isbn);
+			System.out.println(title);
+			System.out.println(mainAuthor);
+			System.out.println(publisher);
+			System.out.println(year);
+					
+			System.out.println(fid);
+			System.out.println(amount);
+			System.out.println(fineIssuedDate);
+			System.out.println(paidDate);
+			System.out.println(borrowing);
+					
+			System.out.println(hid);
+			System.out.println(holdRequestCallNumber);
+			System.out.println(holdRequestIssuedDate);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	//	Place a hold request for a book that is out. When the item is r
 	//	eturned, the system sends an
 	//	email to the borrower and informs the library clerk to keep the book out of the shelves.
 
 	
-	public void placeHoldRequest(int callNo, int id){
-		//stub
-		// INSERT INTO holdrequest VALUES (_, id, callNo, currentDate)
-
-		branch b = new branch();
-		Connection con = b.getConnection();
-		PreparedStatement  ps;
-
-		try {
-			ps = con.prepareStatement("INSERT INTO holdrequest VALUES (seq_holdrequest.nextval, ?, ?, ?)");
-			ps.setInt(1, id);
-			ps.setInt(2, callNo);
-			ps.setDate(3, currentdate);
-			
-			//gets currentDate
-			//ps.setString(1, "01-01-2014");
-
-			// commit work 
-			ps.executeUpdate(); 
-			con.commit();
-			ps.close();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		// first value is unique generated integer, currentDate is obv
-	}
+//	public void placeHoldRequest(int callNo, int id){
+//		//stub
+//		// INSERT INTO holdrequest VALUES (_, id, callNo, currentDate)
+//
+//		branch b = new branch();
+//		Connection con = b.getConnection();
+//		PreparedStatement  ps;
+//
+//		try {
+//			ps = con.prepareStatement("INSERT INTO holdrequest(bid, callNumber, issuedDate) VALUES (?, ?, ?)");
+//			ps.setInt(1, id);
+//			ps.setInt(2, callNo);
+//			ps.setDate(3, currentdate);
+//			
+//			//gets currentDate
+//			java.util.Date date = new Date();
+//			java.sql.Date d = new java.sql.Date(date.getTime());
+//			ps.setDate(1, d);
+//			//ps.setString(1, "01-01-2014");
+//
+//			// commit work 
+//			ps.executeUpdate(); 
+//			con.commit();
+//			ps.close();
+//			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		// first value is unique generated integer, currentDate is obv
+//	}
 	
 	/*
 	 * COMPLETED!

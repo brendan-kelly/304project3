@@ -168,7 +168,8 @@ public class branch
 		
 	//	branch b = new branch();
 		Borrower Harlan = new Borrower();
-		Harlan.placeHoldRequest(4, 3);
+		//Harlan.placeHoldRequest(4, 3);
+		Harlan.checkAccount(1);
 
 	
 	}
@@ -193,7 +194,7 @@ public class branch
 		try 
 		{
 			//con = DriverManager.getConnection(connectURL,username,password);
-			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_z7z7","a29420114");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_e7d8","a41097106");
 			System.out.println("\nConnected to Oracle!");
 
 		}
