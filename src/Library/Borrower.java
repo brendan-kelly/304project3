@@ -64,15 +64,12 @@ public class Borrower {
 		PreparedStatement  ps;
 
 		try {
-			ps = con.prepareStatement("INSERT INTO holdrequest(bid, callNumber, issuedDate) VALUES (?, ?, ?)");
+			ps = con.prepareStatement("INSERT INTO holdrequest VALUES (seq_holdrequest.nextval, ?, ?, ?)");
 			ps.setInt(1, id);
 			ps.setInt(2, callNo);
 			ps.setDate(3, currentdate);
 			
 			//gets currentDate
-			java.util.Date date = new Date();
-			java.sql.Date d = new java.sql.Date(date.getTime());
-			ps.setDate(1, d);
 			//ps.setString(1, "01-01-2014");
 
 			// commit work 
