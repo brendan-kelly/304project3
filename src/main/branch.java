@@ -3,16 +3,18 @@ package main;
 
 // We need to import the java.sql package to use JDBC
 import java.sql.*;
-// for reading from the command line
-import java.io.*;
 
 // for the login window
-import javax.swing.*;
-
 import Library.Borrower;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.net.URL;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 
 
 /*
@@ -165,11 +167,37 @@ public class branch
 
 	public static void main(String args[]) throws SQLException
 	{
+		//MainMenu m = new MainMenu();
+        
+		 /* Use an appropriate Look and Feel */
+        try {
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        /* Turn off metal's use of bold fonts */
+        UIManager.put("swing.boldMetal", Boolean.FALSE);
+        //Schedule a job for the event dispatchi thread:
+        //creating and showing this application's GUI.
+        
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
+        });
+
+
 		
 	//	branch b = new branch();
-		Borrower Harlan = new Borrower();
-		//Harlan.placeHoldRequest(4, 3);
-		Harlan.checkAccount(1);
+	//	Borrower Harlan = new Borrower();
+	//	Harlan.placeHoldRequest(4, 3);
 
 	
 	}
@@ -189,12 +217,24 @@ public class branch
 			e.printStackTrace();
 		}
 	}*/
-
+	
+    private static void createAndShowGUI() {
+        //Create and set up the window.
+        MainMenu frame = new MainMenu("Library");
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Set up the content pane.
+        frame.addComponentsToPane(frame.getContentPane());
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }
+    
 	public Connection getConnection() {
 		try 
 		{
 			//con = DriverManager.getConnection(connectURL,username,password);
-			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_e7d8","a41097106");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_z7z7","a29420114");
 			System.out.println("\nConnected to Oracle!");
 
 		}
