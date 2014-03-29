@@ -3,6 +3,8 @@ package main;
 
 // We need to import the java.sql package to use JDBC
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
 // for reading from the command line
 import java.io.*;
 
@@ -10,6 +12,8 @@ import java.io.*;
 import javax.swing.*;
 
 import Library.Borrower;
+import Library.Clerk;
+import Library.Librarian;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -168,9 +172,14 @@ public class branch
 		
 	//	branch b = new branch();
 		Borrower Harlan = new Borrower();
-		Harlan.placeHoldRequest(4, 3);
+		Librarian Conor = new Librarian();
+		java.util.Date date = new Date();
+		java.sql.Date currentdate = new java.sql.Date(date.getTime());
+		Clerk Brendan = new Clerk();
+		ArrayList<Integer> newlist = new ArrayList<Integer>();
+		newlist.add(1);
+		Conor.generateBookReport(null);
 
-	
 	}
 
 
@@ -193,7 +202,7 @@ public class branch
 		try 
 		{
 			//con = DriverManager.getConnection(connectURL,username,password);
-			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_z7z7","a29420114");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_m3d8","a43579119");
 			System.out.println("\nConnected to Oracle!");
 
 		}
