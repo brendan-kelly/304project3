@@ -108,7 +108,7 @@ public class Clerk {
 			rs1 = ps.executeQuery();
 			//have to call next once to get to the first row
 			while(rs1.next()){
-			expiryDate = rs1.getDate(1);
+				expiryDate = rs1.getDate(1);
 			}
 			ps.close();
 
@@ -337,28 +337,35 @@ public class Clerk {
 	public int findBorrowerDays(int bid){
 		//		  //Figure out the BorrowerType
 		PreparedStatement ps;
+		PreparedStatement ps2;
 		ResultSet rs;
 		ResultSet rs2;
-		String BorrowerType;
+		String BorrowerType = null;
 		int BorrowerDays = 0;
 
 		try{
 
-			ps = con.prepareStatement("SELECT * FROM borrower WHERE borrower.borrower_bid = ?");
+			ps = con.prepareStatement("SELECT borrower.borrowertype_type FROM borrower WHERE borrower.borrower_bid = ?");
 			ps.setInt(1, bid);
 			rs = ps.executeQuery();
-			rs.next();
-			BorrowerType = rs.getString(9);
-
+			while(rs.next()){
+				BorrowerType = rs.getString(1);
+			}
 			ps.close();
+
 			//Figure out ascossiated Date with BorrowerType
-			ps = con.prepareStatement("SELECT * FROM borrowertype WHERE borrowertype_type = ?");
-			ps.setString(1, BorrowerType);
-			rs2 = ps.executeQuery();
-			rs.next();
-			BorrowerDays = rs2.getInt(2);
 
-			ps.close();
+			ps2 = con.prepareStatement("SELECT * FROM borrowertype WHERE borrowertype.borrowertype_type = ?");
+			ps2.setString(1, BorrowerType);
+
+			rs2 = ps2.executeQuery();
+
+			while(rs2.next()){
+				BorrowerDays = rs2.getInt(2);
+			}
+			
+			ps2.close();
+
 		}
 
 		catch (SQLException ex)
