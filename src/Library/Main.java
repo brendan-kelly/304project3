@@ -202,10 +202,10 @@ public class Main implements ActionListener{
 
 		switch(choice)
 		{
-		   case 1:  insertBorrower(); break;
-		   case 2:  deleteBorrower(); break;
-		   case 3:  updateBorrower(); break;
-		   case 4:  showBorrower(); break;
+//		   case 1:  insertBorrower(); break;
+//		   case 2:  deleteBorrower(); break;
+//		   case 3:  updateBorrower(); break;
+//		   case 4:  showBorrower(); break;
 		   case 5:  quit = true;
 		}
 	    }
@@ -241,93 +241,93 @@ public class Main implements ActionListener{
 //    		, password 2, name 3, address 4, phone 5,
 //    		emailAddress 6, sinOrStNo 7, expiryDate 8,
 //    		type 9)
-    private void insertBorrower()
-    {
-	
-    	Borrower b = new Borrower();
-    	PreparedStatement  ps;
-    	
-	try
-	{
-	  ps = con.prepareStatement("INSERT INTO borrower VALUES (?,?,?,?,?,?,?,?,?)");
-	
-	  System.out.print("\nBorrower ID: ");
-	  b.bid = Integer.parseInt(in.readLine());
-	  ps.setInt(1, b.bid);
-  
-	  System.out.print("\nBorrower password: ");
-	  b.bpassword = in.readLine();
-	  ps.setString(2, b.bpassword);
-	  
-	  System.out.print("\nBorrower Name: ");
-	  b.bname = in.readLine();
-	  ps.setString(3, b.bname);
-
-	  System.out.print("\nBorrower Address: ");
-	  b.baddr = in.readLine();  
-	  if (b.baddr.length() == 0)
-          {
-	      ps.setString(4, null);
-	  }
-	  else
-	  {
-	      ps.setString(4, b.baddr);
-	  }
-	  
-
-	  System.out.print("\nBorrower Phone: ");
-	  String phoneTemp = in.readLine();
-	  if (phoneTemp.length() == 0)
-	  {
-	      ps.setNull(5, java.sql.Types.INTEGER);
-	  }
-	  else
-	  {
-		  b.bphone = Integer.parseInt(phoneTemp);
-	      ps.setInt(5, b.bphone);
-	  }
-	  
-	  System.out.print("\nBorrower Email: ");
-	  b.bemail = in.readLine();
-	  ps.setString(6, b.bemail);
-	  
-	  System.out.print("/nBorrower sinOrStNo:");
-	  b.bsinOrStNo = Integer.parseInt(in.readLine());
-	  ps.setInt(b.bsinOrStNo, 7);
-	  
-	  System.out.print("/nBorrower expiryDate:");
-	  b.bexpiryDate = Integer.parseInt(in.readLine());
-	  ps.setInt(b.bexpiryDate, 8);
-	  ps.executeUpdate();
-	  
-	  System.out.print("\nBorrower type: ");
-	  b.btype = in.readLine();
-	  ps.setString(2, b.btype);
-
-	  // commit work 
-	  con.commit();
-
-	  ps.close();
-	}
-	catch (IOException e)
-	{
-	    System.out.println("IOException!");
-	}
-	catch (SQLException ex)
-	{
-	    System.out.println("Message: " + ex.getMessage());
-	    try 
-	    {
-		// undo the insert
-		con.rollback();	
-	    }
-	    catch (SQLException ex2)
-	    {
-		System.out.println("Message: " + ex2.getMessage());
-		System.exit(-1);
-	    }
-	}
-    }
+//    private void insertBorrower()
+//    {
+//	
+//    	Borrower b = new Borrower();
+//    	PreparedStatement  ps;
+//    	
+//	try
+//	{
+//	  ps = con.prepareStatement("INSERT INTO borrower VALUES (?,?,?,?,?,?,?,?,?)");
+//	
+//	  System.out.print("\nBorrower ID: ");
+//	  b.bid = Integer.parseInt(in.readLine());
+//	  ps.setInt(1, b.bid);
+//  
+//	  System.out.print("\nBorrower password: ");
+//	  b.bpassword = in.readLine();
+//	  ps.setString(2, b.bpassword);
+//	  
+//	  System.out.print("\nBorrower Name: ");
+//	  b.bname = in.readLine();
+//	  ps.setString(3, b.bname);
+//
+//	  System.out.print("\nBorrower Address: ");
+//	  b.baddr = in.readLine();  
+//	  if (b.baddr.length() == 0)
+//          {
+//	      ps.setString(4, null);
+//	  }
+//	  else
+//	  {
+//	      ps.setString(4, b.baddr);
+//	  }
+//	  
+//
+//	  System.out.print("\nBorrower Phone: ");
+//	  String phoneTemp = in.readLine();
+//	  if (phoneTemp.length() == 0)
+//	  {
+//	      ps.setNull(5, java.sql.Types.INTEGER);
+//	  }
+//	  else
+//	  {
+//		  b.bphone = Integer.parseInt(phoneTemp);
+//	      ps.setInt(5, b.bphone);
+//	  }
+//	  
+//	  System.out.print("\nBorrower Email: ");
+//	  b.bemail = in.readLine();
+//	  ps.setString(6, b.bemail);
+//	  
+//	  System.out.print("/nBorrower sinOrStNo:");
+//	  b.bsinOrStNo = Integer.parseInt(in.readLine());
+//	  ps.setInt(b.bsinOrStNo, 7);
+//	  
+//	  System.out.print("/nBorrower expiryDate:");
+//	  b.bexpiryDate = Integer.parseInt(in.readLine());
+//	  ps.setInt(b.bexpiryDate, 8);
+//	  ps.executeUpdate();
+//	  
+//	  System.out.print("\nBorrower type: ");
+//	  b.btype = in.readLine();
+//	  ps.setString(2, b.btype);
+//
+//	  // commit work 
+//	  con.commit();
+//
+//	  ps.close();
+//	}
+//	catch (IOException e)
+//	{
+//	    System.out.println("IOException!");
+//	}
+//	catch (SQLException ex)
+//	{
+//	    System.out.println("Message: " + ex.getMessage());
+//	    try 
+//	    {
+//		// undo the insert
+//		con.rollback();	
+//	    }
+//	    catch (SQLException ex2)
+//	    {
+//		System.out.println("Message: " + ex2.getMessage());
+//		System.exit(-1);
+//	    }
+//	}
+//    }
 
     public Connection getConnection(){
     	return con;

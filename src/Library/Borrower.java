@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import main.branch;
-import main.Book;
 
 public class Borrower {
 	java.util.Date date = new Date();
