@@ -1,7 +1,10 @@
 package Library;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import main.Book;
 import main.branch;
@@ -12,6 +15,8 @@ public class Clerk {
 	//So we can use the connectoin "con" to access the SQL database
 	branch b = new branch();
 	Connection con = b.getConnection();
+	java.util.Date date = new Date();
+	java.sql.Date currentdate = new java.sql.Date(date.getTime());
 
 
 	// Creates a borrower with the given input
@@ -105,7 +110,94 @@ public class Clerk {
 		// INSERT INTO fine VALUES (generated, amount??, currentDate, null, id)
 		// Send "messages" to all the following users: 
 		// SELECT holdrequest.borrowing_bid FROM holdrequest, Temp WHERE Temp.book_callNumber = holdrequest.book_callNumber
-		
+		ResultSet rs;
+		ResultSet rs2;
+		ResultSet rs3;
+		ResultSet rs4;
+		PreparedStatement ps;
+		PreparedStatement ps2;
+		PreparedStatement ps3;
+		PreparedStatement ps4;
+		PreparedStatement ps5;
+		PreparedStatement ps6;
+		try
+		{
+		// Creates variable for the outDate and Bid of the user who bororwed this book
+		  ps = con.prepareStatement("SELECT * FROM borrowing WHERE borrowing.bookcopy_copyNo = ?");
+		  ps.setInt(1, copyNo);
+		  rs = ps.executeQuery();
+		  int bid = 0;
+		  int borid = 0;
+		  Date outDate = null;
+		  String BorrowerType = "";
+		  int BorrowerDays = 0;
+		  while (rs.next()){
+			  borid = rs.getInt(1);
+			  bid = rs.getInt(2);
+			  outDate = rs.getDate(5);
+			  System.out.print(bid);
+		  
+		  }
+		  
+		  
+		  //Sets the bookcopy to In
+		  ps2 = con.prepareStatement("UPDATE bookcopy SET bookcopy.bookcopy_status = 'In' WHERE bookcopy.bookcopy_copyNo = ?");
+		  ps2.setInt(1, copyNo);
+		  ps2.executeUpdate();
+		  //Sets teh bookcopy InDate to today
+		  ps3 = con.prepareStatement("UPDATE borrowing SET borrowing.borrowing_inDate = ? WHERE borrowing.bookcopy_copyNo = ?");
+		  ps3.setDate(1,  currentdate);
+		  ps3.setInt(2,  copyNo);
+		  ps3.executeUpdate();
+//		  //Figure out the BorrowerType
+		  ps4 = con.prepareStatement("SELECT * FROM borrower WHERE borrower.borrower_bid = ?");
+		  ps4.setInt(1, bid);
+		  rs2 = ps4.executeQuery();
+		  while (rs2.next()){
+			  BorrowerType = rs2.getString(9);
+		  }
+//		  //Figure out ascossiated Date with BorrowerType
+		  ps5 = con.prepareStatement("SELECT * FROM borrowertype WHERE borrowertype_type = ?");
+		  ps5.setString(1, BorrowerType);
+		  rs = ps5.executeQuery();
+		  while (rs.next()){
+			  BorrowerDays = rs.getInt(2);
+		  }
+
+		  //Creates a tempDate that is equal to the outdate + the borrowingtime
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar c = Calendar.getInstance();
+		c.setTime(outDate);
+		c.add(Calendar.DATE, BorrowerDays); // Adding 5 days
+		Date tempDate = c.getTime();
+		Date now = new Date();
+	
+		// If the user is late returning their book, a fine will be created for 20$
+		  if(now.before(tempDate) == false){
+			  ps6 = con.prepareStatement("INSERT INTO fine VALUES (seq_fine.nextval, 20, ?, null, ?)");
+			  ps6.setDate(1, currentdate);
+			  ps6.setInt(2, borid);
+			  ps6.executeUpdate();
+		  }
+		  
+		  
+		  
+
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+			try 
+			{
+				// undo the insert
+				con.rollback();	
+			}
+			catch (SQLException ex2)
+			{
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
 	}
 
 	//	Checks overdue items. The system displays a list of the items that are overdue and the
