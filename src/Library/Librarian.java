@@ -2,6 +2,7 @@ package Library;
 
 import java.sql.*;
 import java.util.ArrayList;
+
 import main.Book;
 import main.branch;
 
@@ -14,6 +15,27 @@ public class Librarian {
 	//		the information for the new book, and the system adds it to the library
 	public void addBook(int callNumber, int isbn, String title, String mainAuthor, String publisher, Date Year){
 		//stub, think Brendan already wrote this
+		
+		branch b = new branch();
+		Connection con = b.getConnection();
+		PreparedStatement  ps;
+
+		try {
+			ps = con.prepareStatement("INSERT INTO book VALUES (?, ?, ?, ?, ?, ?)");
+			ps.setInt(1,  callNumber);
+			ps.setInt(2,  isbn);
+			ps.setString(3,  title);
+			ps.setString(4,  mainAuthor);
+			ps.setString(5,  publisher);
+			ps.setDate(6,  Year);
+			ps.executeUpdate(); 
+			con.commit();
+			ps.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 	//		
 	//		Generate a report with all the books that have been
