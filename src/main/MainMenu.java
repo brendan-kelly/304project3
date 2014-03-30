@@ -69,6 +69,7 @@ public class MainMenu extends JFrame{
             public void actionPerformed(ActionEvent e){
             	BorrowerMenu bmenu = new BorrowerMenu();
             	pane.removeAll();
+            	
             	//update the experiment layout
                 panel.validate();
                 panel.repaint();
