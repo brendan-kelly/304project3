@@ -61,8 +61,8 @@ public class Borrower {
 			con.commit();
 			ps.close();
 			
-			System.out.println(bookList);
-			System.out.println(titleList);
+			System.out.println("Book List = " + bookList);
+			System.out.println("Title List = " + titleList);
 			
 			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books available 
 				ps2 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo) FROM bookcopy WHERE bookcopy.bookcopy_status = 'In'"
@@ -82,7 +82,7 @@ public class Borrower {
 			}
 			ps2.close();
 			
-			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books available 
+			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books unavailable 
 				ps3 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo) FROM bookcopy WHERE bookcopy.bookcopy_status = 'Out'"
 										 + " AND bookcopy.book_callNumber = ?"); 
 				int callNumber1 = bookList.get(i); 
@@ -186,19 +186,16 @@ public class Borrower {
 		Connection con = b.getConnection();
 		PreparedStatement  ps;
 
-		try { 	//holdrequest_hid integer not null PRIMARY KEY,
-				//borrower_bid integer not null,
-				//book_callNumber integer not null,
-				//holdrequest_issuedDate date,
-			ps = con.prepareStatement("INSERT INTO holdrequest VALUES (seq_holdrequest.nextval, ?, ?, ?)");
+		try {
+			ps = con.prepareStatement("INSERT INTO holdrequest(borrower_bid, book_callNumber, holdrequest_issuedDate) VALUES (?, ?, ?)");
 			ps.setInt(1, id);
 			ps.setInt(2, callNo);
 			ps.setDate(3, currentdate);
 			
 			//gets currentDate
-//			java.util.Date date = new Date();
-//			java.sql.Date d = new java.sql.Date(date.getTime());
-//			ps.setDate(1, d);
+			java.util.Date date = new Date();
+			java.sql.Date d = new java.sql.Date(date.getTime());
+			ps.setDate(1, d);
 			//ps.setString(1, "01-01-2014");
 
 			// commit work 

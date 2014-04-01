@@ -6,6 +6,7 @@ import java.sql.*;
 
 // for the login window
 import Library.Borrower;
+import Library.Librarian;
 
 import java.net.URL;
 
@@ -170,34 +171,36 @@ public class branch
 		//MainMenu m = new MainMenu();
         
 		 /* Use an appropriate Look and Feel */
-        try {
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        /* Turn off metal's use of bold fonts */
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
-        //Schedule a job for the event dispatchi thread:
-        //creating and showing this application's GUI.
-        
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+//        try {
+//            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//        } catch (UnsupportedLookAndFeelException ex) {
+//            ex.printStackTrace();
+//        } catch (IllegalAccessException ex) {
+//            ex.printStackTrace();
+//        } catch (InstantiationException ex) {
+//            ex.printStackTrace();
+//        } catch (ClassNotFoundException ex) {
+//            ex.printStackTrace();
+//        }
+//        /* Turn off metal's use of bold fonts */
+//        UIManager.put("swing.boldMetal", Boolean.FALSE);
+//        //Schedule a job for the event dispatchi thread:
+//        //creating and showing this application's GUI.
+//        
+//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                createAndShowGUI();
+//            }
+//        });
 
 
 		
-	//	branch b = new branch();
-	//	Borrower Harlan = new Borrower();
-	//	Harlan.placeHoldRequest(4, 3);
+		branch b = new branch();
+		Librarian Conor = new Librarian();
+		Conor.generateYearlyReport(2013, 10);
+		Conor.generateYearlyReport(2012, 10);
+		Conor.generateYearlyReport(2011, 10);
 
 	
 	}
