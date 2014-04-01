@@ -1,6 +1,7 @@
 package Library;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import main.branch;
-import main.Book;
 
 public class Borrower {
 	java.util.Date date = new Date();
@@ -18,20 +18,90 @@ public class Borrower {
 	//Look for Wysiwyg for UI 
 
 	public void Borrower(){
-	//	payFine(1);
 	}
 	//So we can use the connectoin "con" to access the SQL database
 
 	//	Search for books using keyword search on titles, authors and subjects. The result is a list
 	//	of books that match the search together with the number of copies that are in and out.
 	public void search(String keyword){
-		Statement  stmt;
-		ResultSet  rs;
 
-		// SELECT * FROM book, hassubject WHERE book.book_title = keyword OR book.book_mainAuthor = keyword OR hassubject.hassubject_subject = keyword AND book.book_callNumber = hassubject.book_callNumber ORDER BY book.book_callNumber AS Temp
-		// SELECT COUNT (bookcopy) FROM bookcopy, Temp WHERE book.bookcopy_status = "in", Temp.book_callNumber = bookcopy.book_callNumber ORDER BY bookcopy.book_callNumber
-		// SELECT COUNT (bookcopy) FROM bookcopy, Temp WHERE book.bookcopy_status = "out", Temp.book_callNumber = bookcopy.book_callNumber ORDER BY bookcopy.book_callNumber
-		// works! SELECT * FROM book, hassubject WHERE book.book_title = 'Kavinsky' OR book.book_mainAuthor = 'Kavinsky' OR hassubject.hassubject_subject = 'Deep and Passionate Teen Angst' AND book.book_callNumber = hassubject.book_callNumber
+		branch b = new branch();
+		Connection con = b.getConnection();
+		
+		PreparedStatement ps;
+		PreparedStatement ps2 = null;
+		PreparedStatement ps3 = null;
+		ResultSet rs;
+		ResultSet bookCopy;
+		
+		Integer callNumber = 0;
+		String title = "";
+
+		ArrayList<Integer> bookList = new ArrayList<Integer>();
+		ArrayList<String> titleList = new ArrayList<String>();
+		
+		int numberOfBooks = 0;
+		
+		try {
+			ps = con.prepareStatement("SELECT book.book_callNumber, book_title FROM book, hassubject WHERE "
+					+ "book.book_title LIKE ? OR book.book_mainAuthor LIKE ? OR hassubject.hassubject_subject"
+					+ " LIKE ? AND book.book_callNumber = hassubject.book_callNumber");
+			ps.setString(1, '%' + keyword + '%');
+			ps.setString(2,'%' + keyword + '%');
+			ps.setString(3,'%' + keyword + '%');
+			rs = ps.executeQuery();
+
+			while(rs.next()) {
+				callNumber = rs.getInt("book_callNumber");
+				title = rs.getString("book_title");
+			    bookList.add(callNumber);
+			    titleList.add(title);
+			}
+			
+			con.commit();
+			ps.close();
+			
+			System.out.println(bookList);
+			System.out.println(titleList);
+			
+			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books available 
+				ps2 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo) FROM bookcopy WHERE bookcopy.bookcopy_status = 'In'"
+									     + " AND bookcopy.book_callNumber = ?"); 
+				int callNumber1 = bookList.get(i); 
+				ps2.setInt(1, callNumber1); 
+				bookCopy = ps2.executeQuery(); 
+				if (bookCopy != null){ 
+					while(bookCopy.next()){ 
+						if (bookCopy.getInt(1) != 0){ 
+							numberOfBooks = bookCopy.getInt(1); 
+						} 
+					} 
+				} 
+				System.out.println("Book Name: " + titleList.get(i) + " has " + numberOfBooks + " copies avaliable.");
+				
+			}
+			ps2.close();
+			
+			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books available 
+				ps3 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo) FROM bookcopy WHERE bookcopy.bookcopy_status = 'Out'"
+										 + " AND bookcopy.book_callNumber = ?"); 
+				int callNumber1 = bookList.get(i); 
+				ps3.setInt(1, callNumber1); 
+				bookCopy = ps3.executeQuery(); 
+				if (bookCopy != null){ 
+					while(bookCopy.next()){ 
+						if (bookCopy.getInt(1) != 0){ 
+							numberOfBooks = bookCopy.getInt(1); 
+						} 
+					} 
+				} 
+				System.out.println("Book Name: " + titleList.get(i) + " has " + numberOfBooks + " copies borrowed.");
+			}
+			ps3.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//	Check
@@ -41,34 +111,7 @@ public class Borrower {
 	//	placed by the borrower. 
 	//	NOTE: Not sure need to input id or not, because it IS in the specific borrower class, so we could create an instance of
 	//	the borrower item and then call this on the specific item, or we could input the specific ID of the user. 
-
 	public void checkAccount(int id){
-		//stub
-		// SELECT * FROM book
-		// works!! SELECT * FROM borrowing WHERE borrowing.borrowing_inDate IS NULL AND
-		// borrowing.borrowing_outDate IS NOT NULL AND borrowing.borrower_bid = id
-		// this should return the books they borrowed
-		// SELECT * FROM Fine, borrowing WHERE fine.fine_paidDate IS NULL AND borrowing.borrowing_borid = fine.borrowing_borid
-		// AND borrowing.borrower_bid = id
-		// This shoudl return all the fines that have not been paid from the list of borrowed books?
-		// SELECT * FROM holdrequest WHERE holdrequest.borrower_bid = id
-		
-		String callNumber = "";
-		String isbn = "";
-		String title = "";
-		String mainAuthor = "";
-		String publisher = "";
-		String year = "";
-		
-		String fid = "";
-		String amount = "";
-		String fineIssuedDate = "";
-		String paidDate = "";
-		String borrowing = "";
-		
-		String hid = "";
-		String holdRequestCallNumber = "";
-		String holdRequestIssuedDate = "";
 		
 		branch b = new branch();
 		Connection con = b.getConnection();
@@ -80,6 +123,14 @@ public class Borrower {
 		ResultSet rs2;
 		ResultSet rs3;
 		
+		String title = "";
+		String amount = "";
+		String holdRequestCallNumber = "";
+		
+		ArrayList<String> bookList = new ArrayList<String>();
+		ArrayList<String> holdRequestList = new ArrayList<String>();
+		ArrayList<String> fineList = new ArrayList<String>();
+		
 		try {
 			ps = con.prepareStatement("SELECT * FROM book WHERE EXISTS (SELECT * FROM borrowing WHERE " +
 					   "borrowing.borrowing_inDate IS NULL AND borrowing.borrower_bid = ? " +
@@ -88,25 +139,17 @@ public class Borrower {
 			rs = ps.executeQuery();
 
 			while(rs.next()) {
-				callNumber = rs.getString("book_callNumber");
-				isbn = rs.getString("book_isbn");
 				title = rs.getString("book_title");
-				mainAuthor = rs.getString("book_mainAuthor");
-				publisher = rs.getString("book_publisher");
-				year = rs.getString("book_year");
+				bookList.add(title);
 			}
 			
 			ps2 = con.prepareStatement("SELECT * FROM Fine, borrowing WHERE fine.fine_paidDate IS NULL " +
 									   "AND fine.borrowing_borid = borrowing.borrowing_borid ");
-			//ps2.setInt(1, id);
 			rs2 = ps2.executeQuery();
 			
 			while(rs2.next()) {
-				fid = rs2.getString("fine_fid");
 				amount = rs2.getString("fine_amount");
-				fineIssuedDate = rs2.getString("fine_issuedDate");
-				paidDate = rs2.getString("fine_paidDate");
-				borrowing = rs2.getString("borrowing_borid");
+				fineList.add(amount);
 			}
 			
 			ps3 = con.prepareStatement("SELECT * FROM holdrequest WHERE holdrequest.borrower_bid = ?");
@@ -114,72 +157,61 @@ public class Borrower {
 			rs3 = ps3.executeQuery();
 			
 			while(rs3.next()) {
-				hid = rs3.getString("holdrequest_hid");
+				
 				holdRequestCallNumber = rs3.getString("book_callNumber");
-				holdRequestIssuedDate = rs3.getString("holdrequest_issuedDate");
+				holdRequestList.add(holdRequestCallNumber);
 			}
 			
 			ps.executeUpdate(); 
 			con.commit();
 			ps.close();
 			
-			System.out.println(callNumber);
-			System.out.println(isbn);
-			System.out.println(title);
-			System.out.println(mainAuthor);
-			System.out.println(publisher);
-			System.out.println(year);
-					
-			System.out.println(fid);
-			System.out.println(amount);
-			System.out.println(fineIssuedDate);
-			System.out.println(paidDate);
-			System.out.println(borrowing);
-					
-			System.out.println(hid);
-			System.out.println(holdRequestCallNumber);
-			System.out.println(holdRequestIssuedDate);
+			System.out.println(bookList);
+			System.out.println("Fine amount = " + fineList);
+			System.out.println(holdRequestList);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	//	Place a hold request for a book that is out. When the item is r
 	//	eturned, the system sends an
 	//	email to the borrower and informs the library clerk to keep the book out of the shelves.
+	public void placeHoldRequest(int callNo, int id){
+		//stub
+		// INSERT INTO holdrequest VALUES (_, id, callNo, currentDate)
 
-	
-//	public void placeHoldRequest(int callNo, int id){
-//		//stub
-//		// INSERT INTO holdrequest VALUES (_, id, callNo, currentDate)
-//
-//		branch b = new branch();
-//		Connection con = b.getConnection();
-//		PreparedStatement  ps;
-//
-//		try {
-//			ps = con.prepareStatement("INSERT INTO holdrequest(bid, callNumber, issuedDate) VALUES (?, ?, ?)");
-//			ps.setInt(1, id);
-//			ps.setInt(2, callNo);
-//			ps.setDate(3, currentdate);
-//			
-//			//gets currentDate
+		branch b = new branch();
+		Connection con = b.getConnection();
+		PreparedStatement  ps;
+
+		try { 	//holdrequest_hid integer not null PRIMARY KEY,
+				//borrower_bid integer not null,
+				//book_callNumber integer not null,
+				//holdrequest_issuedDate date,
+			ps = con.prepareStatement("INSERT INTO holdrequest VALUES (seq_holdrequest.nextval, ?, ?, ?)");
+			ps.setInt(1, id);
+			ps.setInt(2, callNo);
+			ps.setDate(3, currentdate);
+			
+			//gets currentDate
 //			java.util.Date date = new Date();
 //			java.sql.Date d = new java.sql.Date(date.getTime());
 //			ps.setDate(1, d);
-//			//ps.setString(1, "01-01-2014");
-//
-//			// commit work 
-//			ps.executeUpdate(); 
-//			con.commit();
-//			ps.close();
-//			
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//
-//		// first value is unique generated integer, currentDate is obv
-//	}
+			//ps.setString(1, "01-01-2014");
+
+			// commit work 
+			ps.executeUpdate(); 
+			con.commit();
+			ps.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// first value is unique generated integer, currentDate is obv
+	}
 	
 	/*
 	 * COMPLETED!
