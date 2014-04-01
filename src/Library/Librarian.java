@@ -156,6 +156,7 @@ public class Librarian {
 	//	times during that year. The books are ordered by the number of times they were
 	//	borrowed.
 
+
 	public void generateYearlyReport(Integer year, Integer n){
 		//SELECT book.book_callNumber, count(book.book_callNumber) FROM borrowing, book WHERE (select to_char(borrowing.borrowing_outDate, 'YYYY') from dual) = '2013' AND book.book_callNumber = borrowing.book_callNumber GROUP BY book.book_callNumber;
 		//A29420114

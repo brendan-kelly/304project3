@@ -1,0 +1,40 @@
+SELECT bookcopy, borrower FROM borrowing, borrowertype WHERE borrowing.borrowing_inDate IS NULL AND SUM(borrowertype.borrowertype_bookTimeLimit + borrowing.borrowing_outDate) < TO_DATE('20-JAN-2014','DD-MM-YYYY')
+
+
+SELECT to_number( to_char(to_date('1','J') + (date1 - date2), 'J') - 1)  days, to_char(to_date('00:00:00','HH24:MI:SS') + (date1 - date2), 'HH24:MI:SS') time FROM dates;
+
+
+		//stub
+		//																									borrower.borrowertype_type = borrowertype.borrowertype_type
+		// SELECT bookcopy, borrower FROM borrowing, borrowertype WHERE borrowing.borrowing_inDate IS NULL, ((int [borrowertype.borrowertype_bookTimeLimit) + 
+		//												  borrowing.borrowing_outDate) < CurrentDate 
+		
+SELECT * FROM borrowing, borrowertype WHERE borrowertype.borrowertype_bookTimeLimit > ALL (select to_number( to_char(to_date('1','J') + (to_date(sysdate) - to_date(borrowing.borrowing_outDate)), 'J') - 1) from dual, borrowing WHERE borrowing.borrowing_outDate is NOT NULL);
+
+
+
+Select to_char(sysdate, 'dd-mm-yyyy') from dual;
+Select to_char(borrowing.borrowing_outDate, 'dd-mm-yyyy') from borrowing
+
+
+select to_number( to_char(to_date('1','J') + (to_date(sysdate) - to_date(borrowing.borrowing_outDate)), 'J') - 1) from dual, borrowing;
+
+
+
+select to_date(sysdate, 'dd-mm-yyyy') - to_date(borrowing.borrowing_outDate, 'dd-mm-yyyy') from dual, borrowing;
+
+
+Select to_date(sysdate, 'dd-mm-yy hh24:mi') from dual;
+
+select to_date(sysdate, 'dd-mm-yyyy') - to_date(borrowing.borrowing_outDate, 'dd-mm-yyyy') from dual, borrowing;
+
+select to_date(borrowing.borrowing_outdate, 'DD-MM-YYYY') from borrowing;
+
+
+
+
+select to_number( to_char(to_date('1','J') + (to_date(sysdate) - to_date(borrowing.borrowing_outDate)), 'J') - 1) from dual, borrowing;
+
+
+select borrowertype from borrowertype_bookTimeLimit
+

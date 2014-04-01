@@ -6,7 +6,11 @@ import java.sql.*;
 
 // for the login window
 import Library.Borrower;
+<<<<<<< HEAD
 import Library.Librarian;
+=======
+import Library.Clerk;
+>>>>>>> 276edfed2b242c7a5e9a740d3d366cf809d64934
 
 import java.net.URL;
 
@@ -168,6 +172,7 @@ public class branch
 
 	public static void main(String args[]) throws SQLException
 	{
+
 		//MainMenu m = new MainMenu();
         
 		 /* Use an appropriate Look and Feel */
@@ -195,12 +200,27 @@ public class branch
 //        });
 
 
+
+
 		
+		Borrower Harlan = new Borrower();
+		Clerk Brendan = new Clerk();
+
 		branch b = new branch();
 		Librarian Conor = new Librarian();
 		Conor.generateYearlyReport(2013, 10);
 		Conor.generateYearlyReport(2012, 10);
 		Conor.generateYearlyReport(2011, 10);
+
+		Brendan.checkOverdueItems();
+		
+		//Harlan.placeHoldRequest(4, 3);
+		Harlan.checkAccount(1);
+		Harlan.search("Carl Sagan");
+
+	//	Borrower Harlan = new Borrower();
+	//	Harlan.placeHoldRequest(4, 3);
+
 
 	
 	}
@@ -237,7 +257,7 @@ public class branch
 		try 
 		{
 			//con = DriverManager.getConnection(connectURL,username,password);
-			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_z7z7","a29420114");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_e7d8","a41097106");
 			System.out.println("\nConnected to Oracle!");
 
 		}
