@@ -211,7 +211,7 @@ public class branch
 
 		Brendan.checkOverdueItems();
 		
-		//Harlan.placeHoldRequest(4, 3);
+		Harlan.placeHoldRequest(4, 3);
 		Harlan.checkAccount(1);
 		Harlan.search("Carl Sagan");
 
