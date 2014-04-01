@@ -19,7 +19,7 @@ public class Borrower {
 
 	public void Borrower(){
 	}
-	//So we can use the connectoin "con" to access the SQL database
+	//So we can use the connection "con" to access the SQL database
 
 	//	Search for books using keyword search on titles, authors and subjects. The result is a list
 	//	of books that match the search together with the number of copies that are in and out.
@@ -104,10 +104,8 @@ public class Borrower {
 		}
 	}
 
-	//	Check
-	//	his/her account. The system will display the items the borrower has currently
-	//	borrowed and not yet returned,
-	//	any outstanding fines and the hold requests that have been
+	//	Check his/her account. The system will display the items the borrower has currently
+	//	borrowed and not yet returned, any outstanding fines and the hold requests that have been
 	//	placed by the borrower. 
 	//	NOTE: Not sure need to input id or not, because it IS in the specific borrower class, so we could create an instance of
 	//	the borrower item and then call this on the specific item, or we could input the specific ID of the user. 
@@ -175,8 +173,7 @@ public class Borrower {
 		}
 	}
 	
-	//	Place a hold request for a book that is out. When the item is r
-	//	eturned, the system sends an
+	//	Place a hold request for a book that is out. When the item is returned, the system sends an
 	//	email to the borrower and informs the library clerk to keep the book out of the shelves.
 	public void placeHoldRequest(int callNo, int id){
 		//stub

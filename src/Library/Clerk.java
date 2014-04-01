@@ -319,20 +319,10 @@ public class Clerk {
 	}
 
 	//	Checks overdue items. The system displays a list of the items that are overdue and the
-	//	borrowers who have checked them out.
-	//	The clerk may decide to se
-	//	nd an email messages
-	//	to any
-	//	of
-	//	them (or to all of them)
+	//	borrowers who have checked them out. The clerk may decide to send an email messages
+	//	to any of them (or to all of them.
 	public void checkOverdueItems(){
-		//stub
-		//																									borrower.borrowertype_type = borrowertype.borrowertype_type
-		// SELECT bookcopy, borrower FROM borrowing, borrowertype WHERE borrowing.borrowing_inDate IS NULL, ((int [borrowertype.borrowertype_bookTimeLimit) + 
-		//												  borrowing.borrowing_outDate) < CurrentDate 
-		
-		// if currentdate - outdate > timelimit then its overdue
-		
+
 		PreparedStatement ps;
 		ResultSet rs;
 		
