@@ -61,8 +61,8 @@ public class Borrower {
 			con.commit();
 			ps.close();
 			
-			System.out.println(bookList);
-			System.out.println(titleList);
+			System.out.println("Book List = " + bookList);
+			System.out.println("Title List = " + titleList);
 			
 			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books available 
 				ps2 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo) FROM bookcopy WHERE bookcopy.bookcopy_status = 'In'"
@@ -82,7 +82,7 @@ public class Borrower {
 			}
 			ps2.close();
 			
-			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books available 
+			for(int i = 0; i < bookList.size(); i++ ){ //get the number of books unavailable 
 				ps3 = con.prepareStatement("SELECT COUNT(bookcopy.bookcopy_copyNo) FROM bookcopy WHERE bookcopy.bookcopy_status = 'Out'"
 										 + " AND bookcopy.book_callNumber = ?"); 
 				int callNumber1 = bookList.get(i); 
@@ -187,7 +187,7 @@ public class Borrower {
 		PreparedStatement  ps;
 
 		try {
-			ps = con.prepareStatement("INSERT INTO holdrequest(bid, callNumber, issuedDate) VALUES (?, ?, ?)");
+			ps = con.prepareStatement("INSERT INTO holdrequest(borrower_bid, book_callNumber, holdrequest_issuedDate) VALUES (?, ?, ?)");
 			ps.setInt(1, id);
 			ps.setInt(2, callNo);
 			ps.setDate(3, currentdate);

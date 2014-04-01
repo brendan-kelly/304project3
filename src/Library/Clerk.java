@@ -330,6 +330,48 @@ public class Clerk {
 		//																									borrower.borrowertype_type = borrowertype.borrowertype_type
 		// SELECT bookcopy, borrower FROM borrowing, borrowertype WHERE borrowing.borrowing_inDate IS NULL, ((int [borrowertype.borrowertype_bookTimeLimit) + 
 		//												  borrowing.borrowing_outDate) < CurrentDate 
+		
+		// if currentdate - outdate > timelimit then its overdue
+		
+		PreparedStatement ps;
+		ResultSet rs;
+		
+		String bookCallNumber;
+		String borrowerID;
+		
+		ArrayList<String> bookCallNumberList = new ArrayList<String>();
+		ArrayList<String> borrowerIDList = new ArrayList<String>();
+		
+		try {
+			ps = con.prepareStatement("SELECT book_callNumber, borrower_bid FROM borrowing, borrowertype WHERE borrowertype.borrowertype_bookTimeLimit < ALL "
+					+ "(select to_number( to_char(to_date('1','J') + (to_date(sysdate) - to_date(borrowing.borrowing_outDate)), 'J') - 1) from dual, borrowing "
+					+ "WHERE borrowing.borrowing_outDate is NOT NULL)");
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				bookCallNumber = rs.getString(1);
+				bookCallNumberList.add(bookCallNumber);
+				borrowerID = rs.getString(2);
+				borrowerIDList.add(borrowerID);
+			}
+			ps.close();
+			System.out.println("Book Call Numbers = " + bookCallNumberList);
+			System.out.println("Borrower IDs = " + borrowerIDList);
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+			try 
+			{
+				// undo the insert
+				con.rollback();	
+			}
+			catch (SQLException ex2)
+			{
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
 	}
 
 	//Gives you the number of days a borrower is allowed to checkout an item for

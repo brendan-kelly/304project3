@@ -3,16 +3,10 @@ package main;
 
 // We need to import the java.sql package to use JDBC
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
-// for reading from the command line
-import java.io.*;
-
 
 // for the login window
 import Library.Borrower;
 import Library.Clerk;
-import Library.Librarian;
 
 import java.net.URL;
 
@@ -175,42 +169,22 @@ public class branch
 	public static void main(String args[]) throws SQLException
 	{
 
-		
-	//	branch b = new branch();
-//		Borrower Harlan = new Borrower();
-//		Librarian Conor = new Librarian();
-//		java.util.Date date = new Date();
-//		java.sql.Date currentdate = new java.sql.Date(date.getTime());
-//		Clerk Brendan = new Clerk();
-//		ArrayList<Integer> newlist = new ArrayList<Integer>();
-//		newlist.add(1);
-//		Conor.generateBookReport(null);
 
-		//MainMenu m = new MainMenu();
-        
-		 /* Use an appropriate Look and Feel */
-        try {
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        /* Turn off metal's use of bold fonts */
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
-        //Schedule a job for the event dispatchi thread:
-        //creating and showing this application's GUI.
-        
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+
+		
+		Borrower Harlan = new Borrower();
+		Clerk Brendan = new Clerk();
+		
+		Brendan.checkOverdueItems();
+		
+		//Harlan.placeHoldRequest(4, 3);
+		Harlan.checkAccount(1);
+		Harlan.search("Carl Sagan");
+
+	//	Borrower Harlan = new Borrower();
+	//	Harlan.placeHoldRequest(4, 3);
+
+	
 	}
 
 
@@ -245,7 +219,7 @@ public class branch
 		try 
 		{
 			//con = DriverManager.getConnection(connectURL,username,password);
-			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_m3d8","a43579119");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug","ora_e7d8","a41097106");
 			System.out.println("\nConnected to Oracle!");
 
 		}
