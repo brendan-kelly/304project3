@@ -6,11 +6,8 @@ import java.sql.*;
 
 // for the login window
 import Library.Borrower;
-<<<<<<< HEAD
 import Library.Librarian;
-=======
 import Library.Clerk;
->>>>>>> 276edfed2b242c7a5e9a740d3d366cf809d64934
 
 import java.net.URL;
 
